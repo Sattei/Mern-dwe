@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Digital Wellbeing + Phishing Awareness",
+  "version": "1.0",
+  "description": "Tracks screen time, detects phishing, awards eco-points.",
+  "permissions": ["tabs", "storage", "activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
