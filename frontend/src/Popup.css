@@ -1,0 +1,50 @@
+.popup-container {
+  width: 300px;
+  padding: 10px;
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.refresh-btn {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.refresh-btn:hover {
+  background: #4338ca;
+}
+
+.logs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.log-item {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.log-item a {
+  text-decoration: none;
+  color: #4f46e5;
+  font-size: 14px;
+}
+
+.log-item a:hover {
+  text-decoration: underline;
+}

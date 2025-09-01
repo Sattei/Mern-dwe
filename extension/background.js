@@ -4,23 +4,19 @@ console.log(`RUNNING BACKGROUND.JS`);
 
 // Correct Base URL
 const baseURL = "http://localhost:4000";
+let activeTab = null;
+let tabStart = Date.now();
 
 // Function to send data to backend
-const backend = (url, title) => {
+const backend = (url, title, timeSpent = 0) => {
   fetch(`${baseURL}/api/logged-visit/log-visit`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ url, title }),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url, title, timeSpent }),
   })
     .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    .then((data) => console.log(data))
+    .catch((error) => console.log(error));
 };
 
 // chrome.tabs.onUpdated(()=>)  FOR URL CHANGES OF ACTIVE TAB
@@ -35,10 +31,21 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 // chrome.tabs.onActivated(()=>)  FOR TAB SWITCHES
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  console.log("onActivated fired", activeInfo);
-  let tab = await chrome.tabs.get(activeInfo.tabId);
-  console.log("Switched to URL:", tab.url);
-  backend(tab.url, tab.title || "No Title");
+  const now = Date.now();
+
+  if (activeTab) {
+    const timeSpent = now - tabStart;
+    backend(activeTab.url, activeTab.title, timeSpent);
+  }
+
+  activeTab = await chrome.tabs.get(activeInfo.tabId);
+  tabStart = Date.now();
+});
+
+chrome.idle.onStateChanged.addListener((state) => {
+  if (state === "idle" || state === "locked") {
+    tabStart = Date.now();  
+  }
 });
 
 // SOME BASIC CHROME EXTENSION API FUNCTIONS
